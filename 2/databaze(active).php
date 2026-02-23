@@ -49,23 +49,46 @@
 
 
 
+$dsn = "mysql:host=localhost;dbname=test;charset=utf8";
 
-$servername = "localhost";
-$username = "username";
-$password = "password";
-$dbname = "dbname";
+$username = "ADMIN";
+$password = "ADMIN";
+
 // $connection = new pdo("mysql: $Server,dbname=$db")
 
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=,$dbname", $username, $password);
+    $conn = new PDO($dsn, $username, $password);
     // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "Connected successfully";
   } catch(PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
   }
+
+function get($table, $id){
+  global $db;
+
+  $sql = "SELECT * FROM $table WHERE id = :id";
+  $stmt = $db->prepare($sql);
+  $stmt->execute(['id' => $id]);
+  return $stmt->fetch(PDO::FETCH_ASSOC);
+
+}
+function getAll($table){
+  global $db;
+
+  $sql = "SELECT * FROM $table";
+  $stmt = $db->prepare($sql);
+  $stmt->execute();
+
+  return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+
+
+
   ?>
 
 
 
-?>
