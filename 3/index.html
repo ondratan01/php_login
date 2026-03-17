@@ -29,7 +29,7 @@
     <h1>Práce se soubory</h1>
 
     <div id="container">
-        <!-- Formulář pro vytvoření nového souboru -->
+        <!-- vytvoření souboru -->
         <div>
             <h3>Vytvořit nový soubor</h3>
             <form method="post" action="process.php">
@@ -38,7 +38,7 @@
             </form>
         </div>
 
-        <!-- Formulář pro nahrání souboru -->
+        <!-- nahrání souboru -->
         <div>
             <h3>Nahrát nový soubor</h3>
             <form method="post" enctype="multipart/form-data" action="process.php">
@@ -47,7 +47,7 @@
             </form>
         </div>
 
-        <!-- Výběr souboru pro čtení nebo zápis -->
+        <!-- čtení nebo zápis -->
         <div id="file-selection">
             <h3>Výběr souboru</h3>
             <form method="post" action="process.php">
@@ -56,15 +56,7 @@
             </form>
         </div>
 
-        <!-- Textové pole pro úpravu obsahu souboru -->
-        <div>
-            <h3>Upravit obsah souboru</h3>
-            <form method="post" action="process.php">
-                <textarea name="content" placeholder="Upravte obsah souboru..." required></textarea>
-                <input type="hidden" name="file_name" value="">
-                <button type="submit" name="save">Uložit změny</button>
-            </form>
-        </div>
+        
     </div>
 </body>
 </html>

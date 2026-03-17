@@ -1,12 +1,83 @@
+
 <?php
-// Funkce pro vytvoření nového souboru
+
+if (isset($_POST['open_file'])) {
+    $fileName = $_POST['file_name'];
+    $filePath = 'poznamky/' . $fileName;
+
+    if (file_exists($filePath)) {
+        $fileContent = file_get_contents($filePath);
+        echo $fileName;
+
+        
+        echo '
+        <div>
+            <h3>Upravit obsah souboru</h3>
+            <form method="post" action="process.php">
+                <textarea name="content">' . '</textarea>
+                <input type="hidden" name="file_name" value="' . $fileName . '">
+                <button type="submit" name="save">Uložit změny</button>
+            </form>
+        </div>
+        ';
+
+
+        echo '
+        
+        <div>
+            <h3>Smazat obsah</h3>
+            <form method="post" action="process.php">
+
+            <input type="hidden" name="file_name" value="' . htmlspecialchars($fileName) . '">
+            <button type="submit" name="smazatobsah">Smazat obsah</button>
+
+            </form>
+
+
+        </div>
+        
+        
+        
+        
+        ';
+
+
+
+    } else {
+        echo '<p>Soubor neexistuje.</p>';
+    }
+
+
+
+
+
+
+
+}
+
+
+if (isset($_POST['smazatobsah'])) {
+    // načteme název souboru z hidden inputu
+    $fileName = $_POST['file_name'] ?? '';
+    $filePath = 'poznamky/' . $fileName;
+
+    if (!empty($fileName) && file_exists($filePath)) {
+        // smažeme obsah souboru
+        smazaniObsahu($filePath);
+        echo '<p>Obsah souboru <strong>' . htmlspecialchars($fileName) . '</strong> byl smazán.</p>';
+    } else {
+        echo '<p>Soubor neexistuje nebo nebyl zadán.</p>';
+    }
+}
+
+// create new file
 if (isset($_POST['create_new_file'])) {
     $newFileName = $_POST['new_file_name'];
     $newFilePath = 'poznamky/' . $newFileName;
 
-    // Zkontrolujeme, zda soubor již existuje
+    // kontrola jestli soubor exstuje
     if (!file_exists($newFilePath)) {
-        touch($newFilePath); // Vytvoří nový prázdný soubor
+        touch($newFilePath); // create new prazdny file
         echo '<p>Nový soubor byl vytvořen: ' . $newFileName . '</p>';
     } else {
         echo '<p>Soubor již existuje.</p>';
@@ -46,21 +117,30 @@ if (isset($_POST['open_file'])) {
     }
 }
 
-// Funkce pro uložení změn do souboru
+// Funkce pro uložení změn do souboru¨
+
 if (isset($_POST['save'])) {
     $fileName = $_POST['file_name'];
     $content = $_POST['content'];
     $filePath = 'poznamky/' . $fileName;
 
-    // Zkontrolujeme, zda složka poznamky existuje
+    $fileName = $_POST['file_name'] ?? '';
+
+    if (empty($fileName)) {
+        echo '<p>Chyba: Nebylo zadáno jméno souboru pro uložení.</p>';
+        exit;
+    }
+    
+
+    // kontrola jestli poznamky existuji
     if (!file_exists('poznamky')) {
-        mkdir('poznamky', 0777, true);  // Vytvoří složku, pokud neexistuje
+        mkdir('poznamky', 0777, true);  // udela slozku kdyz neexistuje
     }
 
-    // Zkontrolujeme, zda soubor existuje, a zapisujeme do něj obsah
+    // kontrola jestli existuje a napisu
     if (file_exists($filePath)) {
-        // Pokusíme se zapisovat do souboru
-        if (file_put_contents($filePath, $content) !== false) {
+
+        if (file_put_contents($filePath, $content . "\n", FILE_APPEND) !== false) {
             echo '<p>Změny byly úspěšně uloženy do souboru ' . $fileName . '</p>';
         } else {
             echo '<p>Chyba při ukládání souboru. Zkontrolujte oprávnění.</p>';
@@ -69,4 +149,13 @@ if (isset($_POST['save'])) {
         echo '<p>Soubor neexistuje pro zápis.</p>';
     }
 }
+
+
+function smazaniObsahu($filePath) {
+    file_put_contents($filePath, ' ');
+}
+
+
+
+
 ?>
