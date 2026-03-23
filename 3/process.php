@@ -158,4 +158,29 @@ function smazaniObsahu($filePath) {
 
 
 
+
+// nacteni soubor
+$filename = 'users.txt';
+$filePath = 'db/' . $fileName;
+
+// otevreni souboru na cteni
+$lines = file($filePath); 
+
+foreach ($lines as $line) {
+    
+    $user = explode(";", $line);
+
+    
+    echo "ID: " . $user[0] . "<br>";
+    echo "Jméno: " . $user[1] . "<br>";
+    echo "Email: " . $user[2] . "<br>";
+    echo "Věk: " . $user[3] . "<br><br>";
+}
+
+
+
+
+
+
+
 ?>
